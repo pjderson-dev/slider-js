@@ -129,79 +129,93 @@
 
     <div id="container">
         <div class="slider">
-
             <div class="left">
                 <button class="prev-button"><i class="fa-solid fa-chevron-left"></i></button>
             </div>
 
-            <img id="image" alt="" loading="lazy">
-            <a href="" id="downloadImage"></a>
+            <img id="image" alt="" loading="lazy" src="">
+
+            <!--  -->
+            <a href="" id="downloadImage">Download</a>
             <div class="loader"></div>
+            <!--  -->
+
             <p class="index"></p>
 
             <div class="right">
                 <button class="next-button"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
+
         </div>
 
     </div>
-    <script>
-        const prevButton = document.querySelector(".prev-button");
-        const nextButton = document.querySelector(".next-button");
-        const imageElement = document.querySelector("#image");
-        const indexDisplay = document.querySelector(".index");
 
-        const images = [];
-        const downloadImages = [];
-
-        fetch("https://picsum.photos/v2/list?limit=100")
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("La reponse n'est pas OK");
-                }
-                return response.json();
-            })
-            .then((data) => {
-
-                data.forEach((image) => {
-                    images.push(image.download_url);
-                    downloadImages.push(image.url);
-                    showImage(currentIndex);
-                    downloadImage(currentIndex);
-                })
-
-            })
-            .catch((error) => {
-                console.error("Il y a eu un probleme avec l'operation de la recuperation");
-            })
-
-        let currentIndex = 0;
-
-        function showImage(index) {
-            imageElement.src = images[index];
-            indexDisplay.textContent = `${index + 1} / ${images.length}`;
-        }
-
-        function downloadImage(index) {
-            document.querySelector("#downloadImage").href = `${downloadImages[index]}/download?ixid=M3wxMjA3fD8MXxhbGx8M3x8fHx8fMTc0OTQwMzg1OXw&force=true`;
-        }
-
-        window.addEventListener("load", () => {
-            showImage(currentIndex);
-        })
-
-        prevButton.addEventListener("click", () => {
-            currentIndex = ((currentIndex - 1) + images.length) % images.length;
-            showImage(currentIndex);
-        });
-
-        nextButton.addEventListener("click", () => {
-            currentIndex = (currentIndex + 1) % images.length;
-            showImage(currentIndex);
-        })
-
-
-    </script>
 </body>
+<script>
+
+
+    const prevButton = document.querySelector(".prev-button");
+    const nextButton = document.querySelector(".next-button");
+    const imageElement = document.querySelector("#image");
+    const indexDisplay = document.querySelector(".index");
+
+
+
+
+    const images = [];
+    const downloadImages = [];
+
+
+    fetch("https://picsum.photos/v2/list?limit=100")
+
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error("La reponse n'est OK");
+            }
+            return response.json();
+        })
+        .then((data) => {
+            console.log(data)
+            data.forEach((image) => {
+                images.push(image.download_url);
+                downloadImages.push(image.url);
+                showImage(currentIndex);
+                downloadImage(currentIndex);
+            })
+        })
+        .catch((error) => {
+            console.error("Il y a eu un probleme avec l'operation de la recuperation");
+        })
+
+
+    let currentIndex = 0;
+
+    function showImage(index) {
+        imageElement.src = images[index];
+        indexDisplay.textContent = `${index + 1} / ${images.length}`;
+    }
+
+    function downloadImage(index) {
+        document.querySelector("#downloadImage").href = `${downloadImages[index]}/download?ixid=M3wxMjA3fD8MXxhbGx8M3x8fHx8fMTc0OTQwMzg1OXw&force=true`;
+    }
+
+    window.addEventListener("load", () => {
+        showImage(currentIndex);
+    })
+
+
+
+    prevButton.addEventListener("click", () => {
+        currentIndex = ((currentIndex - 1) + images.length) % images.length;
+        showImage(currentIndex);
+    });
+
+
+    nextButton.addEventListener("click", () => {
+        currentIndex = (currentIndex + 1) % images.length;
+        showImage(currentIndex);
+    })
+
+</script>
 
 </html>
